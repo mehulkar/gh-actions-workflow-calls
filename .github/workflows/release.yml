@@ -26,6 +26,7 @@ on:
         - latest
 jobs:
   build:
+    runs-on: macos-latest
     steps:
       - run: "echo success"
 
