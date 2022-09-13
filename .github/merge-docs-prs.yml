@@ -1,0 +1,9 @@
+name: Merge Docs PR
+on: workflow_call
+
+jobs:
+  DoIt:
+    steps:
+      - run: "echo merged"
+
+
