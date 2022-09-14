@@ -11,7 +11,7 @@ on:
     types: [completed]
 
 jobs:
-  DoIt:
+  build:
     runs-on: ubuntu-latest
     steps:
       # need to check out code to be able to use `gh` CLI (needs a .git directory to get remote)

@@ -2,11 +2,12 @@ name: Hold Docs Pr
 on:
   # TODO: should this be `pull_request_target` for security?
   # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target
+  # TODO: this could target files instead of watching for a label.
   pull_request:
     types: [labeled]
 
 jobs:
-  HoldPr:
+  build:
     runs-on: ubuntu-latest
     steps:
       # need to check out code to be able to use `gh` CLI (needs a .git directory to get remote)
@@ -32,8 +33,9 @@ jobs:
 
           # TODO: Figure out how to do this in bash, without Node
           PR_NUMBER=$(node -e "console.log(process.argv[1].split('/')[2])" $GITHUB_REF)
-
+          echo "PR NUMBER: $PR_NUMBER"
           labels=$(gh pr view "$PR_NUMBER" --json id,labels | jq .labels | jq -c '.[]' | jq .name)
+          echo "PR#$PR_NUMBER has $labels"
           hasLabel=0
           for l of $labels; do
             if [ $l = "$DOCS_LABEL" ]; then
@@ -41,7 +43,9 @@ jobs:
             fi
           done
 
-          if [ $hasLabel = 1 ]; then
+          echo "PR#$PR_NUMBER has $DOCS_LABEL ? : $hasLabel"
 
+          if [ $hasLabel = 1 ]; then
+            echo "Adding $HOLD_LABEL label"
             gh pr edit "$PR_NUMBER" --add-label="$HOLD_LABEL"
           fi
