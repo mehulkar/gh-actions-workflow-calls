@@ -1,0 +1,10 @@
+name: Hold Docs Pr
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  HoldPr:
+    runs-on: ubuntu-latest
+    steps:
+      - run: "echo adding pr hold label"
