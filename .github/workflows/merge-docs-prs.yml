@@ -1,7 +1,11 @@
 name: Merge Docs PR
-on: workflow_call
+on:
+  workflow_dispatch:
+    types:
+      - completed
 
 jobs:
   DoIt:
     steps:
       - run: "echo merged"
+      - run: "which gh"
