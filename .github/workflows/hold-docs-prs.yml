@@ -26,7 +26,7 @@ jobs:
               console.log(`Applying "pr: hold" label to PR ${context.payload.pull_request.number}`)
 
               const owner = context.payload.repository.owner;
-              const ownerName = owner.name;
+              const ownerName = owner.login;
               const repo = context.payload.repository.name;
               const number = context.payload.pull_request.number;
 
@@ -35,17 +35,16 @@ jobs:
               console.log('repo', repo)
               console.log('number', number)
               console.log('sending request')
-              console.log('github', github)
 
-              github.rest.issues.addLabels({
+              const res = await github.rest.issues.addLabels({
                 issue_number: number,
-                owner: owner,
+                owner: ownerName,
                 repo: repo,
                 labels: ['pr: hold']
               })
+
+              console.log(res);
             }
-            console.log('----------------------------')
-            console.log(context)
 
       # - name: Update Labels
       #   shell: bash
