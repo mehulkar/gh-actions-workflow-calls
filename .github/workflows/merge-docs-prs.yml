@@ -2,12 +2,13 @@ name: Merge Docs PR
 on:
   workflow_run:
     workflows: [Release]
-    types:
-      - completed
+    types: [completed]
 
 jobs:
   DoIt:
     runs-on: ubuntu-latest
     steps:
       - run: "echo merged"
-      - run: "which gh"
+      # TODO: the --label filter should only be for the release type from the upstream workflow...
+      - run: |
+        gh pr list --label "pr: docs" --draft=false --json "number" | jq -c ".[]" | jq .number | xargs gh pr edit --remove-label="pr: hold" --add-label="pr: automerge"
