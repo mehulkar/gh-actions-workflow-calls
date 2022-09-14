@@ -1,5 +1,7 @@
 name: Hold Docs Pr
 on:
+  # TODO: should this be `pull_request_target` for security?
+  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target
   pull_request:
     types: [labeled]
 
@@ -7,4 +9,39 @@ jobs:
   HoldPr:
     runs-on: ubuntu-latest
     steps:
-      - run: "echo adding pr hold label"
+      # need to check out code to be able to use `gh` CLI (needs a .git directory to get remote)
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # TODO: remove this when we can parse a string in bash below
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: pnpm
+
+      - name: Update Labels
+        shell: bash
+        # TODO: the --label filter should only be for the release type from the upstream workflow...
+        run: |
+          DOCS_LABEL="\"pr: docs\""
+          HOLD_LABEL="\"pr: hold\""
+          AUTO_MERGE_LABEL="\"pr: automerge\""
+
+          # TODO: Figure out how to do this in bash, without Node
+          PR_NUMBER=$(node -e "console.log(process.argv[1].split('/')[2])" $GITHUB_REF)
+
+          labels=$(gh pr view "$PR_NUMBER" --json id,labels | jq .labels | jq -c '.[]' | jq .name)
+          hasLabel=0
+          for l of $labels; do
+            if [ $l = "$DOCS_LABEL" ]; then
+              hasLabel=1
+            fi
+          done
+
+          if [ $hasLabel = 1 ]; then
+
+            gh pr edit "$PR_NUMBER" --add-label="$HOLD_LABEL"
+          fi

@@ -24,13 +24,13 @@ jobs:
         shell: bash
         # TODO: the --label filter should only be for the release type from the upstream workflow...
         run: |
-          LABEL_FOR_DOCS="\"pr: docs\""
-          LABELS_TO_ADD="\"pr: automerge\""
-          LABELS_TO_RM="\"pr: hold\""
+          DOCS_LABEL="\"pr: docs\""
+          HOLD_LABEL="\"pr: hold\""
+          AUTO_MERGE_LABEL="\"pr: automerge\""
 
-          PR_NUMBERS=$(gh pr list --label "$LABEL_FOR_DOCS" --draft=false --json "number" | jq -c ".[]" | jq .number)
+          PR_NUMBERS=$(gh pr list --label "$DOCS_LABEL" --draft=false --json "number" | jq -c ".[]" | jq .number)
 
           for number in $PR_NUMBERS; do
-            echo "PR#$number: Add labels: $LABELS_TO_ADD, Remove labels: $LABELS_TO_RM "
-            gh pr edit "$number" --remove-label="$LABELS_TO_RM" --add-label="$LABELS_TO_ADD"
+            echo "PR#$number: Add labels: $AUTO_MERGE_LABEL, Remove labels: $HOLD_LABEL "
+            gh pr edit "$number" --remove-label="$HOLD_LABEL" --add-label="$AUTO_MERGE_LABEL"
           done
