@@ -36,6 +36,15 @@ jobs:
               console.log('number', number)
               console.log('sending request')
 
+              // remove if exists
+              await github.rest.issues.removeLabel({
+                issue_number: number,
+                owner: ownerName,
+                repo: repo,
+                labels: ['pr: automerge']
+              })
+
+              // add label
               const res = await github.rest.issues.addLabels({
                 issue_number: number,
                 owner: ownerName,
