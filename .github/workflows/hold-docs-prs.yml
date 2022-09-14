@@ -25,48 +25,55 @@ jobs:
         with:
           node-version: 16
 
-      - name: Update Labels
-        shell: bash
-        # TODO: the --label filter should only be for the release type from the upstream workflow...
-        run: |
-          DOCS_LABEL="\"pr: docs\""
-          HOLD_LABEL="\"pr: hold\""
-          AUTO_MERGE_LABEL="\"pr: automerge\""
+    - uses: actions/github-script@v6
+      with:
+        script: console.log(context)
 
-          echo "[debug] Parsing PR number from $GITHUB_REF"
+      # - name: Update Labels
+      #   shell: bash
+      #   # TODO: the --label filter should only be for the release type from the upstream workflow...
+      #   run: |
+      #     DOCS_LABEL="\"pr: docs\""
+      #     HOLD_LABEL="\"pr: hold\""
+      #     AUTO_MERGE_LABEL="\"pr: automerge\""
 
-          # TODO: Figure out how to do this in bash, without Node
-          PR_NUMBER=$(node -e "console.log(process.argv[1].split('/')[2])" $GITHUB_REF)
-          echo "PR NUMBER: $PR_NUMBER"
+      #     echo "[debug] Parsing PR number from $GITHUB_REF"
 
-          echo "========================="
+      #     # TODO: Figure out how to do this in bash, without Node
+      #     PR_NUMBER=$(node -e "console.log(process.argv[1].split('/')[2])" $GITHUB_REF)
+      #     echo "PR NUMBER: $PR_NUMBER"
 
-          echo "[debug]: Fetching labels"
-          labels=$(gh pr view "$PR_NUMBER" --json id,labels | jq .labels | jq -c '.[]' | jq .name)
-          echo "[debug]: labels:"
-          echo "$labels"
+      #     echo "========================="
 
-          echo "========================="
+      #     echo "[debug]: Fetching labels"
+      #     labels=$(gh pr view "$PR_NUMBER" --json id,labels | jq .labels | jq -c '.[]' | jq .name)
+      #     echo "[debug]: labels:"
+      #     echo "$labels"
 
-          echo "[debug] Looking for $DOCS_LABEL"
+      #     echo "========================="
 
-          hasLabel=0
-          for l in "$labels"; do
-            echo "[debug] Testing $l"
-            if [ "$l" = "$DOCS_LABEL" ]; then
-              echo "$l is the same as $DOCS_LABEL !"
-              hasLabel=1
-            else
-              echo "$l is NOT the same as $DOCS_LABEL !"
-            fi
-            echo "-----------"
-          done
+      #     echo "[debug] Looking for $DOCS_LABEL"
 
-          echo "========================="
 
-          echo "PR#$PR_NUMBER has $DOCS_LABEL ? : $hasLabel"
+      #     hasLabel=$(node -e "console.log(process.argv[1].split(\n).includes("$DOCS_LABEL"))" $labels)
 
-          if [ $hasLabel = 1 ]; then
-            echo "Adding $HOLD_LABEL label"
-            gh pr edit "$PR_NUMBER" --add-label="$HOLD_LABEL"
-          fi
+      #     hasLabel=0
+      #     for l in "$labels"; do
+      #       echo "[debug] Testing $l"
+      #       if [ "$l" = "$DOCS_LABEL" ]; then
+      #         echo "$l is the same as $DOCS_LABEL !"
+      #         hasLabel=1
+      #       else
+      #         echo "$l is NOT the same as $DOCS_LABEL !"
+      #       fi
+      #       echo "-----------"
+      #     done
+
+      #     echo "========================="
+
+      #     echo "PR#$PR_NUMBER has $DOCS_LABEL ? : $hasLabel"
+
+      #     if [ $hasLabel = 1 ]; then
+      #       echo "Adding $HOLD_LABEL label"
+      #       gh pr edit "$PR_NUMBER" --add-label="$HOLD_LABEL"
+      #     fi
