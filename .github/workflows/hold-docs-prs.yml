@@ -22,37 +22,49 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-            if (context.payload.label.name === 'pr: docs') {
-              console.log(`Applying "pr: hold" label to PR ${context.payload.pull_request.number}`)
+            const MERGE_LABEL = 'pr: automerge'
+            const HOLD_LABEL = 'pr: hold'
+            const DOCS_LABEL = 'pr: docs'
+
+            if (context.payload.label.name === DOCS_LABEL) {
+              const pr = context.payload.pull_request;
+
+              console.log(`PR #${pr.number}: Processing`)
 
               const owner = context.payload.repository.owner;
               const ownerName = owner.login;
               const repo = context.payload.repository.name;
-              const number = context.payload.pull_request.number;
-
-              console.log('owner', owner)
-              console.log('ownerName', ownerName)
-              console.log('repo', repo)
-              console.log('number', number)
-              console.log('sending request')
 
               // remove if exists
-              await github.rest.issues.removeLabel({
-                issue_number: number,
-                owner: ownerName,
-                repo: repo,
-                labels: ['pr: automerge']
-              })
+              if (pr.labels.includes(MERGE_LABEL)) {
+                console.log('removing automerge label')
+                await github.rest.issues.removeLabel({
+                  issue_number: pr.number,
+                  owner: ownerName,
+                  repo: repo,
+                  labels: [MERGE_LABEL]
+                })
+                console.log(res);
+              } else {
+                console.log(`"${MERGE_LABEL}" label not found`)
+              }
 
-              // add label
-              const res = await github.rest.issues.addLabels({
-                issue_number: number,
-                owner: ownerName,
-                repo: repo,
-                labels: ['pr: hold']
-              })
+              console.log('------------------------');
 
-              console.log(res);
+              if (!pr.labels.includes(HOLD_LABEL)) {
+                console.log(`Adding "${HOLD_LABEL}" label`)
+                const res = await github.rest.issues.addLabels({
+                  issue_number: pr.number,
+                  owner: ownerName,
+                  repo: repo,
+                  labels: [HOLD_LABEL]
+                });
+                console.log(res);
+              } else {
+                console.log(`"${HOLD_LABEL}" label already exists`)
+              }
+
+
             }
 
       # - name: Update Labels
