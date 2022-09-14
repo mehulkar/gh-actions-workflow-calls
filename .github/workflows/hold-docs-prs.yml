@@ -31,6 +31,8 @@ jobs:
               console.log('repo', repo)
               console.log('number', number)
               console.log('sending request')
+              console.log('github', github)
+
               github.rest.pull_request.addLabels({
                 issue_number: number,
                 owner: owner,
