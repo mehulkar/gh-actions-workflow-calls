@@ -1,7 +1,7 @@
 name: Merge Docs PR
 on:
   workflow_dispatch:
-  workflows: [Release]
+    workflows: [Release]
     types:
       - completed
 
