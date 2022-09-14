@@ -38,8 +38,10 @@ jobs:
           echo "PR NUMBER: $PR_NUMBER"
           labels=$(gh pr view "$PR_NUMBER" --json id,labels | jq .labels | jq -c '.[]' | jq .name)
           echo "PR#$PR_NUMBER has $labels"
+
+          echo "Checking if $labels includes $DOCS_LABEL"
           hasLabel=0
-          for l of $labels; do
+          for l in $labels; do
             if [ $l = "$DOCS_LABEL" ]; then
               hasLabel=1
             fi
