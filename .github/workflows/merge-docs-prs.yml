@@ -6,8 +6,6 @@ env:
 on:
   workflow_run:
     workflows: [Release]
-
-    # TODO: do we need to check if upstream workflow compleeted successfully?
     types: [completed]
 
 jobs:
@@ -21,6 +19,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Debug
         uses: actions/github-script@v6
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
           script: |
             const MERGE_LABEL = 'pr: automerge'
