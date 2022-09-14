@@ -41,7 +41,7 @@ jobs:
               if (labelNames.includes(MERGE_LABEL)) {
                 console.log('removing automerge label')
                 // https://octokit.github.io/rest.js/v18#issues-remove-label
-                await github.rest.issues.removeLabel({
+                const res = await github.rest.issues.removeLabel({
                   issue_number: pr.number,
                   owner: ownerName,
                   repo: repo,
