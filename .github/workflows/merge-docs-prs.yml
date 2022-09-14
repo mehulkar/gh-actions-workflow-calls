@@ -7,6 +7,7 @@ on:
 
 jobs:
   DoIt:
+    runs-on: ubuntu-latest
     steps:
       - run: "echo merged"
       - run: "which gh"

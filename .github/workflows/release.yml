@@ -26,7 +26,7 @@ on:
         - canary
         - latest
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
       - run: "echo success"
