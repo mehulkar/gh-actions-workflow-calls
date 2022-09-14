@@ -25,12 +25,25 @@ jobs:
             const MERGE_LABEL = 'pr: automerge'
             const HOLD_LABEL = 'pr: hold'
             const DOCS_LABEL = 'pr: docs'
+            const owner = context.payload.repository.owner;
+            const ownerName = owner.login;
+            const repo = context.payload.repository.name;
 
+
+            const jobId = context.payload.workflow_run.id
             console.log('------------------')
-            console.log('id', context.payload.workflow_run.id)
+            console.log('id', jobId)
             console.log('------------------')
             // console.log('run', context.payload.workflow_run)
             console.log('------------------')
+
+            const res = await github.rest.actions.getJobForWorkflowRun({
+              owner: ownerName,
+              repo: repo,
+              job_id: jobId,
+            });
+
+            console.log(res);
 
       - name: Update Labels
         shell: bash

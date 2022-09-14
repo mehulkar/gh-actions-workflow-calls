@@ -26,16 +26,16 @@ jobs:
             const HOLD_LABEL = 'pr: hold'
             const DOCS_LABEL = 'pr: docs'
 
+            const owner = context.payload.repository.owner;
+            const ownerName = owner.login;
+            const repo = context.payload.repository.name;
+
             if (context.payload.label.name === DOCS_LABEL) {
               const pr = context.payload.pull_request;
               const labelNames = pr.labels.map(l => l.name)
               console.log(`PR #${pr.number}: Docs PR found. Adding hold labels to prevent merge`);
 
               console.log('Labels', labelNames)
-
-              const owner = context.payload.repository.owner;
-              const ownerName = owner.login;
-              const repo = context.payload.repository.name;
 
               // remove if exists
               if (labelNames.includes(MERGE_LABEL)) {
