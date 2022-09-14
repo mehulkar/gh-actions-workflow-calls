@@ -5,5 +5,3 @@ jobs:
   DoIt:
     steps:
       - run: "echo merged"
-
-
