@@ -28,17 +28,17 @@ jobs:
 
             if (context.payload.label.name === DOCS_LABEL) {
               const pr = context.payload.pull_request;
-
+              const labelNames = pr.labels.map(l => l.name)
               console.log(`PR #${pr.number}: Docs PR found. Adding hold labels to prevent merge`);
 
-              console.log('Labels', pr.labels)
+              console.log('Labels', labelNames)
 
               const owner = context.payload.repository.owner;
               const ownerName = owner.login;
               const repo = context.payload.repository.name;
 
               // remove if exists
-              if (pr.labels.includes(MERGE_LABEL)) {
+              if (labelNames.includes(MERGE_LABEL)) {
                 console.log('removing automerge label')
                 await github.rest.issues.removeLabel({
                   issue_number: pr.number,
@@ -53,7 +53,7 @@ jobs:
 
               console.log('------------------------');
 
-              if (pr.labels.includes(HOLD_LABEL)) {
+              if (labelNames.includes(HOLD_LABEL)) {
                 console.log(`"${HOLD_LABEL}" label already exists`)
               } else {
                 console.log(`Adding "${HOLD_LABEL}" label`)
