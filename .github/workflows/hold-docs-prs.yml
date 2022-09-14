@@ -24,16 +24,20 @@ jobs:
           script: |
             if (context.payload.label.name === 'pr: docs') {
               console.log(`Applying "pr: hold" label to PR ${context.payload.pull_request.number}`)
-              const owner = context.payload.repository.owner.name;
+
+              const owner = context.payload.repository.owner;
+              const ownerName = owner.name;
               const repo = context.payload.repository.name;
               const number = context.payload.pull_request.number;
+
               console.log('owner', owner)
+              console.log('ownerName', ownerName)
               console.log('repo', repo)
               console.log('number', number)
               console.log('sending request')
               console.log('github', github)
 
-              github.rest.pull_request.addLabels({
+              github.rest.issues.addLabels({
                 issue_number: number,
                 owner: owner,
                 repo: repo,
