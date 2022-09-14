@@ -25,9 +25,9 @@ jobs:
         with:
           node-version: 16
 
-    - uses: actions/github-script@v6
-      with:
-        script: console.log(context)
+      - uses: actions/github-script@v6
+        with:
+          script: console.log(context)
 
       # - name: Update Labels
       #   shell: bash
