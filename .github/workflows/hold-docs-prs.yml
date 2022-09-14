@@ -40,11 +40,12 @@ jobs:
               // remove if exists
               if (labelNames.includes(MERGE_LABEL)) {
                 console.log('removing automerge label')
+                // https://octokit.github.io/rest.js/v18#issues-remove-label
                 await github.rest.issues.removeLabel({
                   issue_number: pr.number,
                   owner: ownerName,
                   repo: repo,
-                  labels: [MERGE_LABEL]
+                  labels: MERGE_LABEL
                 })
                 console.log(res);
               } else {
@@ -57,11 +58,12 @@ jobs:
                 console.log(`"${HOLD_LABEL}" label already exists`)
               } else {
                 console.log(`Adding "${HOLD_LABEL}" label`)
+                // https://octokit.github.io/rest.js/v18#issues-add-labels
                 const res = await github.rest.issues.addLabels({
                   issue_number: pr.number,
                   owner: ownerName,
                   repo: repo,
-                  labels: [HOLD_LABEL]
+                  labels: [{ name: HOLD_LABEL }]
                 });
                 console.log(res);
               }
