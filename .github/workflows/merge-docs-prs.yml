@@ -2,6 +2,8 @@ name: Merge Docs PR
 on:
   workflow_run:
     workflows: [Release]
+
+    # TODO: do we need to check if upstream workflow compleeted successfully?
     types: [completed]
 
 jobs:
