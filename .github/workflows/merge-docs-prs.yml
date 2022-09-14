@@ -14,6 +14,7 @@ jobs:
   DoIt:
     runs-on: ubuntu-latest
     steps:
+      # need to check out code to be able to use `gh` CLI (needs a .git directory to get remote)
       - name: Check out code
         uses: actions/checkout@v3
         with:
@@ -23,9 +24,11 @@ jobs:
         shell: bash
         # TODO: the --label filter should only be for the release type from the upstream workflow...
         run: |
-          PR_NUMBERS=$(gh pr list --label "pr: docs" --draft=false --json "number" | jq -c ".[]" | jq .number)
+          LABEL_FOR_DOCS="\"pr: docs\""
           LABELS_TO_ADD="\"pr: automerge\""
           LABELS_TO_RM="\"pr: hold\""
+
+          PR_NUMBERS=$(gh pr list --label "$LABEL_FOR_DOCS" --draft=false --json "number" | jq -c ".[]" | jq .number)
 
           for number in $PR_NUMBERS; do
             echo "PR#$number: Add Labels: $LABELS_TO_ADD, rm labels: $LABELS_TO_RM "
