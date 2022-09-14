@@ -31,6 +31,5 @@ jobs:
       - run: "echo success"
 
       ## TODO, can we make the @main here the _current_ SHA so changes reflect the HEAD branch?
-      - name: Trigger Merge Docs Workflow
-        uses: mehulkar/gh-actions-workflow-calls/.github/workflows/merge-docs-prs.yml@main
+      - uses: mehulkar/gh-actions-workflow-calls/.github/workflows/merge-docs-prs.yml@main
 
