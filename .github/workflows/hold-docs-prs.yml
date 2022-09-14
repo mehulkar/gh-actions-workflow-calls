@@ -29,7 +29,8 @@ jobs:
             if (context.payload.label.name === DOCS_LABEL) {
               const pr = context.payload.pull_request;
 
-              console.log(`PR #${pr.number}: Processing`)
+              console.log(`PR #${pr.number}: Docs PR found. Adding hold labels to prevent merge`);
+
               console.log('Labels', pr.labels)
 
               const owner = context.payload.repository.owner;
@@ -52,7 +53,9 @@ jobs:
 
               console.log('------------------------');
 
-              if (!pr.labels.includes(HOLD_LABEL)) {
+              if (pr.labels.includes(HOLD_LABEL)) {
+                console.log(`"${HOLD_LABEL}" label already exists`)
+              } else {
                 console.log(`Adding "${HOLD_LABEL}" label`)
                 const res = await github.rest.issues.addLabels({
                   issue_number: pr.number,
@@ -61,11 +64,9 @@ jobs:
                   labels: [HOLD_LABEL]
                 });
                 console.log(res);
-              } else {
-                console.log(`"${HOLD_LABEL}" label already exists`)
               }
-
-
+            } else {
+              console.log(`${context.payload.label.name} label was applied, skipping this event`)
             }
 
       # - name: Update Labels
