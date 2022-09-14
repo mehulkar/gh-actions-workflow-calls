@@ -37,11 +37,14 @@ jobs:
           PR_NUMBER=$(node -e "console.log(process.argv[1].split('/')[2])" $GITHUB_REF)
           echo "PR NUMBER: $PR_NUMBER"
           labels=$(gh pr view "$PR_NUMBER" --json id,labels | jq .labels | jq -c '.[]' | jq .name)
-          echo "PR#$PR_NUMBER has $labels"
 
-          echo "Checking if $labels includes $DOCS_LABEL"
+          echo "PR#$PR_NUMBER labels:"
+          echo "$labels"
+          echo "Looking for $DOCS_LABEL"
+
           hasLabel=0
           for l in $labels; do
+            echo "Checking if $l is the same as $DOCS_LABEL"
             if [ $l = "$DOCS_LABEL" ]; then
               hasLabel=1
             fi
