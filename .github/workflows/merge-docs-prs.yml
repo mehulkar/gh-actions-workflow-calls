@@ -26,13 +26,9 @@ jobs:
             const HOLD_LABEL = 'pr: hold'
             const DOCS_LABEL = 'pr: docs'
 
-            console.log(context)
             console.log('------------------')
-            console.log(context.payload.workflow_run.actor)
+            console.log(context.payload.workflow_run)
             console.log('------------------')
-            console.log(context.payload.workflow_run.triggering_actor)
-            console.log('------------------')
-            console.log(github.event)
 
       - name: Update Labels
         shell: bash
