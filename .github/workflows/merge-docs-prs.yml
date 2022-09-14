@@ -37,10 +37,11 @@ jobs:
             // console.log('run', context.payload.workflow_run)
             console.log('------------------')
 
-            const res = await github.rest.actions.getJobForWorkflowRun({
+            const res = await github.rest.actions.getWorkflowRun({
               owner: ownerName,
               repo: repo,
-              job_id: jobId,
+              run_id: jobId,
+              exclude_pull_requests: true,
             });
 
             console.log(res);
