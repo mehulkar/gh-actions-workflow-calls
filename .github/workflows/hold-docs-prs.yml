@@ -30,6 +30,7 @@ jobs:
               const pr = context.payload.pull_request;
 
               console.log(`PR #${pr.number}: Processing`)
+              console.log('Labels', pr.labels)
 
               const owner = context.payload.repository.owner;
               const ownerName = owner.login;
@@ -46,7 +47,7 @@ jobs:
                 })
                 console.log(res);
               } else {
-                console.log(`"${MERGE_LABEL}" label not found`)
+                console.log(`"${MERGE_LABEL}" label already removed`)
               }
 
               console.log('------------------------');
