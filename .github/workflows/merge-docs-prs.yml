@@ -22,6 +22,9 @@ jobs:
       - name: Update Labels
         shell: bash
         # TODO: the --label filter should only be for the release type from the upstream workflow...
+        # # gh pr edit --remove-label="pr: hold" --add-label="pr: automerge"
         run: |
-          ls -al
-          gh pr list --label "pr: docs" --draft=false --json "number" | jq -c ".[]" | jq .number | xargs gh pr edit --remove-label="pr: hold" --add-label="pr: automerge"
+          PR_NUMBERS=$(gh pr list --label "pr: docs" --draft=false --json "number" | jq -c ".[]" | jq .number)
+          for number in $PR_NUMBERS; do
+            echo "pr: $number"
+          done
