@@ -27,7 +27,9 @@ jobs:
             const DOCS_LABEL = 'pr: docs'
 
             console.log('------------------')
-            console.log(context.payload.workflow_run)
+            console.log('id', context.payload.workflow_run.id)
+            console.log('------------------')
+            // console.log('run', context.payload.workflow_run)
             console.log('------------------')
 
       - name: Update Labels
