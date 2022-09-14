@@ -63,7 +63,7 @@ jobs:
                   issue_number: pr.number,
                   owner: ownerName,
                   repo: repo,
-                  labels: [{ name: HOLD_LABEL }]
+                  labels: [HOLD_LABEL]
                 });
                 console.log(res);
               }
