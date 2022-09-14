@@ -43,10 +43,12 @@ jobs:
           echo "Looking for $DOCS_LABEL"
 
           hasLabel=0
-          for l in $labels; do
-            echo "Checking if $l is the same as $DOCS_LABEL"
-            if [ $l = "$DOCS_LABEL" ]; then
+          for l in "$labels"; do
+            if [ "$l" = "$DOCS_LABEL" ]; then
+              echo "$l is the same as $DOCS_LABEL !"
               hasLabel=1
+            else
+              echo "$l is NOT the same as $DOCS_LABEL !"
             fi
           done
 
