@@ -26,7 +26,14 @@ jobs:
             const MERGE_LABEL = 'pr: automerge'
             const HOLD_LABEL = 'pr: hold'
             const DOCS_LABEL = 'pr: docs'
+
             console.log(context)
+            console.log('------------------')
+            console.log(context.workflow_run.actor)
+            console.log('------------------')
+            console.log(context.workflow_run.triggering_actor)
+            console.log('------------------')
+            console.log(github.event)
 
       - name: Update Labels
         shell: bash
