@@ -29,7 +29,6 @@ jobs:
             const ownerName = owner.login;
             const repo = context.payload.repository.name;
 
-
             const jobId = context.payload.workflow_run.id
             console.log('------------------')
             console.log('id', jobId)
